@@ -6,7 +6,7 @@ matriz_incidencia = [
 ]
 
 def matriz_para_incidencia(matriz, coluna):
-	if(coluna > (len(matriz[0]) - 1)):
+	if(coluna > (len(matriz[0]) - 1) or coluna < 0):
 		return 
 	print(f"Aresta {coluna}")
 	for i, linha in enumerate(matriz):
