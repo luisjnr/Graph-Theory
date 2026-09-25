@@ -154,6 +154,17 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 print("\nPercurso: ")
 percurso(grafo, "Itacarambi", "Montes Claros")
 
+def delete(grafo, origem, destino):
+	if origem not in grafo:
+		print("Origem não existe.")
+	if destino not in grafo:
+		print("Destino não existe.")
+	del grafo[origem][destino]
+	del grafo[destino][origem]
+	return True
+
+delete(grafo, "Itacarambi", "Januária") 
+
 def conexo(grafo, origem): #analisa conexidade do grafo
 	if origem not in grafo:
 		print("Origem não existe.")
@@ -177,7 +188,7 @@ def conexo(grafo, origem): #analisa conexidade do grafo
 
 print("\nConexidade")				
 conexo(grafo, "Itacarambi")
-		
+
 def componentes(grafo): #separa o grafo em componentes
 	visitados = set()
 	componentes = [] #armazena os componentes
@@ -197,11 +208,11 @@ def componentes(grafo): #separa o grafo em componentes
 						pilha.append(vizinho)
 		
 			componentes.append(cidades)
+	cont = 0	
 	for componente in componentes:
-		print(componente)		
+		print(componente)	
+		cont += 1
+	print(f"Quantidade total de componentes: {cont}")
 
 print("\nComponentes: ")
 componentes(grafo)
-
-
-	
