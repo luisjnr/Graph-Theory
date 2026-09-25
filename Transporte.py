@@ -126,6 +126,13 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 			if nova_distancia < distancias[vizinho]: #verifica se a distância do vizinho é menor que a nova distância
 				distancias[vizinho] = nova_distancia #se for menor, atualiza o dicionário distancias e o anteriores
 				anteriores[vizinho] = atual
+		
+		if menor_distancia == float("inf"):
+			break
+	
+	if distancias[destino] == float("inf"):
+		print("Não existe conexão entre a origem e o destino.")
+		return
 	
 	atual = destino
 	caminho = []
@@ -144,4 +151,57 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 		
 	print(f"Distância total: {distancias[destino]}KM")
 		
+print("\nPercurso: ")
 percurso(grafo, "Itacarambi", "Montes Claros")
+
+def conexo(grafo, origem): #analisa conexidade do grafo
+	if origem not in grafo:
+		print("Origem não existe.")
+		return
+
+	visitadas = set()
+	pilha = [origem] #cria uma pilha com a origem
+
+	while pilha: #quando a pilha fica vázia, encerra
+		atual = pilha.pop() #tira um item da pilha e adiciona em atual
+		visitadas.add(atual) #adiciona atual nas cidades visitadas
+
+		for cidade in grafo[atual]: #busca vizinhos da cidade atual
+			if cidade not in visitadas: #adiciona na pilha se ainda não foi visitada
+				pilha.append(cidade)
+	
+	if(len(visitadas) == len(grafo)): #verifica se todas as cidades do grafo foram visitadas
+		print("Grafo conexo")
+	else:
+		print("Grafo desconexo")
+
+print("\nConexidade")				
+conexo(grafo, "Itacarambi")
+		
+def componentes(grafo): #separa o grafo em componentes
+	visitados = set()
+	componentes = [] #armazena os componentes
+
+	for cidade in grafo: #percorre as cidades do grafo e escolhe uma que não foi visitada
+		if cidade not in visitados:	
+			cidades = []
+			pilha = [cidade] #guardas a cidade atual em uma pilha
+				
+			while pilha:
+				atual = pilha.pop() #recebe uma cidade da pilha
+				visitados.add(atual)
+				cidades.append(atual)
+						
+				for vizinho in grafo[atual]: #procura vizinhos e adiciona na pilha, caso não tenham sido visitados
+					if vizinho not in visitados:
+						pilha.append(vizinho)
+		
+			componentes.append(cidades)
+	for componente in componentes:
+		print(componente)		
+
+print("\nComponentes: ")
+componentes(grafo)
+
+
+	
