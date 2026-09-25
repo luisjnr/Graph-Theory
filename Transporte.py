@@ -1,4 +1,4 @@
-#grafo ponderado
+#grafo ponderado das cidades
 grafo = {
 	"Manga": {
 		"São João das Missões": 23
@@ -89,7 +89,59 @@ def grau(grafo): #mostra peso dos vértices
 
 print("\nGrau dos vértices: ")
 grau(grafo)
-
-cidades = list(grafo.keys())
-
-print(cidades.index("Itacarambi"))
+		
+def percurso(grafo, origem, destino): #traça a rota, calcula a distância e guarda as distâncias de ponto a ponto
+	if origem not in grafo:
+		print("Origem não existe.")
+		return
+		
+	if destino not in grafo:
+		print("Destino não existe.")
+		return
+		
+	distancias = {} #guarda distancia ate o destino
+	
+	for cidade in grafo: #inicializa distancia
+		distancias[cidade] = float("inf")
+		
+	distancias[origem] = 0
+	nova_distancia = 0
+	atual = None #cidade atual
+	visitadas = set() #guarda cidades já visitadas
+	anteriores = {} #guarda cidades anteriores a cidade atual
+	
+	while (len(visitadas)) < (len(grafo)): #loop para descobrir a rota	
+		menor_distancia = float("inf")
+		
+		for cidade in distancias: 
+			if cidade not in visitadas: #analisa se a cidade já foi visitada
+				if distancias[cidade] < menor_distancia: #se não foi, analisa se a rota dessa cidade é menor que a menor distância
+					menor_distancia = distancias[cidade] #se for, atualiza a menor distância e a cidade atual
+					atual = cidade
+		
+		visitadas.add(atual)
+		
+		for vizinho, distancia in grafo[atual].items(): #vizinho guarda as cidades vizinhas, e a distância a distância kkk
+			nova_distancia = distancias[atual] + distancia #atualiza a nova distância
+			if nova_distancia < distancias[vizinho]: #verifica se a distância do vizinho é menor que a nova distância
+				distancias[vizinho] = nova_distancia #se for menor, atualiza o dicionário distancias e o anteriores
+				anteriores[vizinho] = atual
+	
+	atual = destino
+	caminho = []
+	
+	while atual != origem: #cria o caminho partindo do destino até a origem
+		caminho.append(atual) #utilizando o dicionário anteriores que registrou
+		atual = anteriores[atual] #as cidades da origem até o destino
+		
+	caminho.append(origem) 
+	caminho.reverse() #reverte a lista caminho, para que fique na ordem de origem a destino
+	
+	print(f"\nOrigem: {origem} ---- Destino: {destino}")
+	print("Rota encontrada: ")
+	for i in range((len(caminho)-1)): #printa a rota de ponto a ponto, e sua distância por ponto
+		print(f"{caminho[i]} ---{grafo[caminho[i]][caminho[i+1]]}KM--- {caminho[i+1]}")
+		
+	print(f"Distância total: {distancias[destino]}KM")
+		
+percurso(grafo, "Itacarambi", "Montes Claros")
