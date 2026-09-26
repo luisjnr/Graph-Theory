@@ -1,31 +1,31 @@
 #grafo ponderado das cidades
 grafo = {
 	"Manga": {
-		"São João das Missões": 23
+		"Missões": 23
 	},
 	
-	"São João das Missões": {
+	"Missões": {
 		"Manga": 23,
 		"Itacarambi": 25
 	},
 	
 	"Itacarambi": {
-		"São João das Missões": 25,
+		"Missões": 25,
 		"Januária": 59
 	},
 	
 	"Januária": {
 		"Itacarambi": 59,
-		"Pedras de Maria da Cruz": 15
+		"Maria da Cruz": 15
 	},
 	
-	"Pedras de Maria da Cruz": {
+	"Maria da Cruz": {
 		"Januária": 15,
 		"Lontra": 35
 	},
 	
 	"Lontra": {
-		"Pedras de Maria da Cruz": 35,
+		"Maria da Cruz": 35,
 		"Japonvar": 12
 	},
 	
@@ -49,7 +49,8 @@ grafo = {
 	}
 }
 
-def matriz_adj(matriz, grafo): #cria uma matriz da adjacência a partir de uma ponderada
+def matriz_adj(grafo): #cria uma matriz da adjacência a partir de uma ponderada
+	matriz = []
 	for cidade in grafo:
 		linha = []
 
@@ -59,16 +60,7 @@ def matriz_adj(matriz, grafo): #cria uma matriz da adjacência a partir de uma p
 			else:
 				linha.append(0)
 		
-		matriz.append(linha)
-
-#representação computacional
-matriz = [] 
-matriz_adj(matriz, grafo)
-
-print("Representação computacional:")
-
-for linha in matriz:
-    print(linha)
+		return matriz.append(linha)
 
 def vizinhos(grafo): #mostra vizinhos
 	for cidade in grafo:
@@ -77,27 +69,21 @@ def vizinhos(grafo): #mostra vizinhos
 			linha.append(vizinhos)
 		print(f"{cidade}, Vizinhos: {linha}")
 
-print("\nCidades e seus vizinhos:")
-vizinhos(grafo)
-
 def grau(grafo): #mostra peso dos vértices
 	for cidade in grafo:
 		grau = 0
 		for vizinhos in grafo[cidade]:
 			grau += grafo[cidade][vizinhos]
 		print(f"{cidade}, Grau: {grau}")
-
-print("\nGrau dos vértices: ")
-grau(grafo)
 		
 def percurso(grafo, origem, destino): #traça a rota, calcula a distância e guarda as distâncias de ponto a ponto
 	if origem not in grafo:
 		print("Origem não existe.")
-		return
+		return False
 		
 	if destino not in grafo:
 		print("Destino não existe.")
-		return
+		return False
 		
 	distancias = {} #guarda distancia ate o destino
 	
@@ -119,6 +105,9 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 					menor_distancia = distancias[cidade] #se for, atualiza a menor distância e a cidade atual
 					atual = cidade
 		
+		if menor_distancia == float("inf"):
+			break
+		
 		visitadas.add(atual)
 		
 		for vizinho, distancia in grafo[atual].items(): #vizinho guarda as cidades vizinhas, e a distância a distância kkk
@@ -126,9 +115,6 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 			if nova_distancia < distancias[vizinho]: #verifica se a distância do vizinho é menor que a nova distância
 				distancias[vizinho] = nova_distancia #se for menor, atualiza o dicionário distancias e o anteriores
 				anteriores[vizinho] = atual
-		
-		if menor_distancia == float("inf"):
-			break
 	
 	if distancias[destino] == float("inf"):
 		print("Não existe conexão entre a origem e o destino.")
@@ -150,25 +136,26 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 		print(f"{caminho[i]} ---{grafo[caminho[i]][caminho[i+1]]}KM--- {caminho[i+1]}")
 		
 	print(f"Distância total: {distancias[destino]}KM")
+	
+	return caminho, distancias[destino]
 		
-print("\nPercurso: ")
-percurso(grafo, "Itacarambi", "Montes Claros")
-
 def delete(grafo, origem, destino):
 	if origem not in grafo:
 		print("Origem não existe.")
+		return False
 	if destino not in grafo:
 		print("Destino não existe.")
-	del grafo[origem][destino]
-	del grafo[destino][origem]
-	return True
-
-delete(grafo, "Itacarambi", "Januária") 
+		return False
+	if destino in grafo[origem]:
+		del grafo[origem][destino]
+		del grafo[destino][origem]
+		return True
+	return False
 
 def conexo(grafo, origem): #analisa conexidade do grafo
 	if origem not in grafo:
 		print("Origem não existe.")
-		return
+		return False
 
 	visitadas = set()
 	pilha = [origem] #cria uma pilha com a origem
@@ -185,9 +172,6 @@ def conexo(grafo, origem): #analisa conexidade do grafo
 		print("Grafo conexo")
 	else:
 		print("Grafo desconexo")
-
-print("\nConexidade")				
-conexo(grafo, "Itacarambi")
 
 def componentes(grafo): #separa o grafo em componentes
 	visitados = set()
@@ -214,5 +198,3 @@ def componentes(grafo): #separa o grafo em componentes
 		cont += 1
 	print(f"Quantidade total de componentes: {cont}")
 
-print("\nComponentes: ")
-componentes(grafo)
