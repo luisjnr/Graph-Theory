@@ -56,25 +56,34 @@ def matriz_adj(grafo): #cria uma matriz da adjacência a partir de uma ponderada
 
 		for destino in grafo:
 			if destino in grafo[cidade]:
-				linha.append(grafo[cidade][destino])
+				linha.append(1)
 			else:
-				linha.append(0)
-		
-		return matriz.append(linha)
-
+				linha.append(0)		
+		matriz.append(linha)
+	print(end=" ")
+	for i in range(len(matriz)):
+		print(end=f" V{i}")
+	print("")
+	for i, linha in enumerate(matriz):
+		print(end=f"V{i}")	
+		print(linha)
+	print("\n")
+	
 def vizinhos(grafo): #mostra vizinhos
 	for cidade in grafo:
 		linha = []
 		for vizinhos in grafo[cidade]:
 			linha.append(vizinhos)
 		print(f"{cidade}, Vizinhos: {linha}")
-
+	print("\n")
+	
 def grau(grafo): #mostra peso dos vértices
 	for cidade in grafo:
 		grau = 0
 		for vizinhos in grafo[cidade]:
 			grau += grafo[cidade][vizinhos]
 		print(f"{cidade}, Grau: {grau}")
+	print("\n")
 		
 def percurso(grafo, origem, destino): #traça a rota, calcula a distância e guarda as distâncias de ponto a ponto
 	if origem not in grafo:
@@ -136,9 +145,9 @@ def percurso(grafo, origem, destino): #traça a rota, calcula a distância e gua
 		print(f"{caminho[i]} ---{grafo[caminho[i]][caminho[i+1]]}KM--- {caminho[i+1]}")
 		
 	print(f"Distância total: {distancias[destino]}KM")
-	
+	print("\n")
 	return caminho, distancias[destino]
-		
+	
 def delete(grafo, origem, destino):
 	if origem not in grafo:
 		print("Origem não existe.")
@@ -152,7 +161,7 @@ def delete(grafo, origem, destino):
 		return True
 	return False
 
-def conexo(grafo, origem): #analisa conexidade do grafo
+def conexidade(grafo, origem): #analisa conexidade do grafo
 	if origem not in grafo:
 		print("Origem não existe.")
 		return False
@@ -172,6 +181,7 @@ def conexo(grafo, origem): #analisa conexidade do grafo
 		print("Grafo conexo")
 	else:
 		print("Grafo desconexo")
+	print("\n")
 
 def componentes(grafo): #separa o grafo em componentes
 	visitados = set()
@@ -197,4 +207,5 @@ def componentes(grafo): #separa o grafo em componentes
 		print(componente)	
 		cont += 1
 	print(f"Quantidade total de componentes: {cont}")
+	print("\n")
 
